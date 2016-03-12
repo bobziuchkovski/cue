@@ -29,10 +29,6 @@ import (
 	"testing"
 )
 
-const (
-	testAddress = "localhost:6283"
-)
-
 // NetRecorder is an interface representing a network listener/recorder.  The
 // recorder stores all content sent to it.  Recorders are created in an
 // unstarted state and must be explicitly started via the Start() method and
@@ -84,13 +80,13 @@ type netRecorder struct {
 
 // NewTCPRecorder returns a NetRecorder that listens for TCP connections.
 func NewTCPRecorder() NetRecorder {
-	return newNetRecorder("tcp", testAddress, false)
+	return newNetRecorder("tcp", randomAddress(), false)
 }
 
 // NewTLSRecorder returns a NetRecorder that listens for TCP connections using
 // TLS transport encryption.
 func NewTLSRecorder() NetRecorder {
-	return newNetRecorder("tcp", testAddress, true)
+	return newNetRecorder("tcp", randomAddress(), true)
 }
 
 func newNetRecorder(network, address string, enableTLS bool) NetRecorder {
@@ -213,4 +209,14 @@ func (se *firstError) Set(err error) {
 	if se.err == nil {
 		se.err = err
 	}
+}
+
+func randomAddress() string {
+	l, err := net.Listen("tcp", "localhost:0")
+	defer l.Close()
+
+	if err != nil {
+		panic(err)
+	}
+	return l.Addr().String()
 }
