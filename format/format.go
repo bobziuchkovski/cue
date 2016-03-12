@@ -94,9 +94,9 @@ func Join(sep string, formatters ...Formatter) Formatter {
 			}
 
 			if needSep {
-				buffer.WriteString(sep)
+				buffer.AppendString(sep)
 			}
-			buffer.Write(tmp.Bytes())
+			buffer.Append(tmp.Bytes())
 			tmp.Reset()
 			needSep = true
 		}
@@ -174,9 +174,9 @@ func splitFormat(format string) []string {
 // support is provided, nor will any be added.
 func Colorize(formatter Formatter) Formatter {
 	return func(buffer Buffer, event *cue.Event) {
-		buffer.WriteString(fmt.Sprintf("\x1b[%dm", colorFor(event.Level)))
+		buffer.AppendString(fmt.Sprintf("\x1b[%dm", colorFor(event.Level)))
 		formatter(buffer, event)
-		buffer.WriteString("\x1b[0m")
+		buffer.AppendString("\x1b[0m")
 	}
 }
 
@@ -203,7 +203,7 @@ func Trim(formatter Formatter) Formatter {
 		defer ReleaseBuffer(tmp)
 
 		formatter(tmp, event)
-		buffer.WriteString(strings.TrimSpace(string(tmp.Bytes())))
+		buffer.AppendString(strings.TrimSpace(string(tmp.Bytes())))
 	}
 }
 
@@ -219,12 +219,12 @@ func Escape(formatter Formatter) Formatter {
 		for _, r := range runes {
 			switch {
 			case r == ' ':
-				buffer.WriteRune(r)
+				buffer.AppendRune(r)
 			case unicode.IsControl(r), unicode.IsSpace(r):
 				quoted := strconv.QuoteRune(r)
-				buffer.WriteString(quoted[1 : len(quoted)-1])
+				buffer.AppendString(quoted[1 : len(quoted)-1])
 			default:
-				buffer.WriteRune(r)
+				buffer.AppendRune(r)
 			}
 		}
 	}
@@ -242,14 +242,14 @@ func Truncate(formatter Formatter, length int) Formatter {
 		if len(bytes) > length {
 			bytes = bytes[:length]
 		}
-		buffer.Write(bytes)
+		buffer.Append(bytes)
 	}
 }
 
 // Literal returns a formatter that always writes s to its buffer.
 func Literal(s string) Formatter {
 	return func(buffer Buffer, event *cue.Event) {
-		buffer.WriteString(s)
+		buffer.AppendString(s)
 	}
 }
 
@@ -257,7 +257,7 @@ func Literal(s string) Formatter {
 // using the formatting rules from the time package.
 func Time(timeFormat string) Formatter {
 	return func(buffer Buffer, event *cue.Event) {
-		buffer.WriteString(event.Time.Format(timeFormat))
+		buffer.AppendString(event.Time.Format(timeFormat))
 	}
 }
 
@@ -272,7 +272,7 @@ func Hostname(buffer Buffer, event *cue.Event) {
 	if idx != -1 {
 		name = name[:idx]
 	}
-	buffer.WriteString(name)
+	buffer.AppendString(name)
 }
 
 // FQDN writes the host's fully-qualified domain name (FQDN) to the buffer.
@@ -282,13 +282,13 @@ func FQDN(buffer Buffer, event *cue.Event) {
 	if err != nil {
 		name = "unknown"
 	}
-	buffer.WriteString(name)
+	buffer.AppendString(name)
 }
 
 // Level writes event.Level.String() to the buffer.  Hence, it writes "INFO"
 // for INFO level messages, "DEBUG" for DEBUG level messages, and so on.
 func Level(buffer Buffer, event *cue.Event) {
-	buffer.WriteString(event.Level.String())
+	buffer.AppendString(event.Level.String())
 }
 
 // Package writes the package name that generated the event.  If this cannot
@@ -296,10 +296,10 @@ func Level(buffer Buffer, event *cue.Event) {
 // ("<unknown package>") instead.
 func Package(buffer Buffer, event *cue.Event) {
 	if len(event.Frames) == 0 {
-		buffer.WriteString(cue.UnknownPackage)
+		buffer.AppendString(cue.UnknownPackage)
 		return
 	}
-	buffer.WriteString(event.Frames[0].Package)
+	buffer.AppendString(event.Frames[0].Package)
 }
 
 // Function writes the function name that generated the event.  If this cannot
@@ -307,10 +307,10 @@ func Package(buffer Buffer, event *cue.Event) {
 // ("<unknown function>") instead.
 func Function(buffer Buffer, event *cue.Event) {
 	if len(event.Frames) == 0 {
-		buffer.WriteString(cue.UnknownFunction)
+		buffer.AppendString(cue.UnknownFunction)
 		return
 	}
-	buffer.WriteString(event.Frames[0].Function)
+	buffer.AppendString(event.Frames[0].Function)
 }
 
 // File writes the source file name that generated the event, path included.
@@ -318,10 +318,10 @@ func Function(buffer Buffer, event *cue.Event) {
 // cue.UnknownFile ("<unknown file>") instead.
 func File(buffer Buffer, event *cue.Event) {
 	if len(event.Frames) == 0 {
-		buffer.WriteString(cue.UnknownFile)
+		buffer.AppendString(cue.UnknownFile)
 		return
 	}
-	buffer.WriteString(event.Frames[0].File)
+	buffer.AppendString(event.Frames[0].File)
 }
 
 // ShortFile writes the source file name that generated the event, path
@@ -329,7 +329,7 @@ func File(buffer Buffer, event *cue.Event) {
 // it writes cue.UnknownFile ("<unknown file>") instead.
 func ShortFile(buffer Buffer, event *cue.Event) {
 	if len(event.Frames) == 0 {
-		buffer.WriteString(cue.UnknownFile)
+		buffer.AppendString(cue.UnknownFile)
 		return
 	}
 	short := event.Frames[0].File
@@ -337,7 +337,7 @@ func ShortFile(buffer Buffer, event *cue.Event) {
 	if idx != -1 {
 		short = short[idx+1:]
 	}
-	buffer.WriteString(short)
+	buffer.AppendString(short)
 }
 
 // Line writes the source line number that generated the event. If this
@@ -345,15 +345,15 @@ func ShortFile(buffer Buffer, event *cue.Event) {
 // instead.
 func Line(buffer Buffer, event *cue.Event) {
 	if len(event.Frames) == 0 {
-		buffer.WriteString("0")
+		buffer.AppendString("0")
 		return
 	}
-	buffer.WriteString(fmt.Sprintf("%d", event.Frames[0].Line))
+	buffer.AppendString(fmt.Sprintf("%d", event.Frames[0].Line))
 }
 
 // Message writes event.Message to the buffer.
 func Message(buffer Buffer, event *cue.Event) {
-	buffer.WriteString(event.Message)
+	buffer.AppendString(event.Message)
 }
 
 // Error writes event.Error.Error() to the buffer.  If event.Error is nil,
@@ -362,7 +362,7 @@ func Error(buffer Buffer, event *cue.Event) {
 	if event.Error == nil {
 		return
 	}
-	buffer.WriteString(event.Error.Error())
+	buffer.AppendString(event.Error.Error())
 }
 
 // ErrorType writes the dereferenced type name for the event's Error field.
@@ -375,16 +375,16 @@ func ErrorType(buffer Buffer, event *cue.Event) {
 	for rtype.Kind() == reflect.Ptr {
 		rtype = rtype.Elem()
 	}
-	buffer.WriteString(rtype.String())
+	buffer.AppendString(rtype.String())
 }
 
 // MessageWithError writes event.Message to the buffer, followed by ": " and
 // event.Error.Error().  The latter portions are omitted if event.Error is nil.
 func MessageWithError(buffer Buffer, event *cue.Event) {
-	buffer.WriteString(event.Message)
+	buffer.AppendString(event.Message)
 	if event.Error != nil && event.Error.Error() != event.Message {
-		buffer.WriteString(": ")
-		buffer.WriteString(event.Error.Error())
+		buffer.AppendString(": ")
+		buffer.AppendString(event.Error.Error())
 	}
 }
 
@@ -395,15 +395,15 @@ func SourceWithLine(buffer Buffer, event *cue.Event) {
 	if short == cue.UnknownFile {
 		return
 	}
-	buffer.WriteString(short)
-	buffer.WriteRune(':')
-	buffer.WriteString(RenderString(Line, event))
+	buffer.AppendString(short)
+	buffer.AppendRune(':')
+	buffer.AppendString(RenderString(Line, event))
 }
 
 // ContextName writes event.Context.Name() to the buffer.  This is the name
 // provided to cue.NewLogger().
 func ContextName(buffer Buffer, event *cue.Event) {
-	buffer.WriteString(event.Context.Name())
+	buffer.AppendString(event.Context.Name())
 }
 
 // HumanContext writes the event.Context key/value pairs in key=value format.
@@ -422,10 +422,10 @@ func HumanContext(buffer Buffer, event *cue.Event) {
 
 	for i, k := range sortedKeys {
 		writeHumanValue(buffer, k)
-		buffer.WriteRune('=')
+		buffer.AppendRune('=')
 		writeHumanValue(buffer, fields[k])
 		if i < len(sortedKeys)-1 {
-			buffer.WriteRune(' ')
+			buffer.AppendRune(' ')
 		}
 	}
 }
@@ -433,7 +433,7 @@ func HumanContext(buffer Buffer, event *cue.Event) {
 func writeHumanValue(buffer Buffer, v interface{}) {
 	s := fmt.Sprint(v)
 	if len(s) == 0 {
-		buffer.WriteString(`""`)
+		buffer.AppendString(`""`)
 		return
 	}
 
@@ -448,10 +448,10 @@ func writeHumanValue(buffer Buffer, v interface{}) {
 		}
 	}
 	if strings.IndexFunc(s, special) >= 0 {
-		buffer.WriteString(strconv.Quote(s))
+		buffer.AppendString(strconv.Quote(s))
 		return
 	}
-	buffer.WriteString(s)
+	buffer.AppendString(s)
 }
 
 // JSONContext marshals the event.Context fields into JSON and writes the
@@ -459,7 +459,7 @@ func writeHumanValue(buffer Buffer, v interface{}) {
 func JSONContext(buffer Buffer, event *cue.Event) {
 	fields := event.Context.Fields()
 	marshaled, _ := json.Marshal(fields)
-	buffer.Write(marshaled)
+	buffer.Append(marshaled)
 }
 
 // StructuredContext marshals the event.Context fields into structured
@@ -476,9 +476,9 @@ func StructuredContext(buffer Buffer, event *cue.Event) {
 
 		writeStructuredPair(tmp, name, value)
 		if needSep {
-			buffer.WriteRune(' ')
+			buffer.AppendRune(' ')
 		}
-		buffer.Write(tmp.Bytes())
+		buffer.Append(tmp.Bytes())
 		tmp.Reset()
 		needSep = true
 	})
@@ -503,11 +503,11 @@ func validStructuredKey(name string) bool {
 }
 
 func writeStructuredPair(buffer Buffer, name string, value interface{}) {
-	buffer.WriteString(name)
-	buffer.WriteRune('=')
-	buffer.WriteRune('"')
+	buffer.AppendString(name)
+	buffer.AppendRune('=')
+	buffer.AppendRune('"')
 	writeStructuredValue(buffer, value)
-	buffer.WriteRune('"')
+	buffer.AppendRune('"')
 }
 
 // See Section 6.3.3 of RFC 5424 for details on the character escapes
@@ -520,16 +520,16 @@ func writeStructuredValue(buffer Buffer, v interface{}) {
 	for _, r := range []rune(s) {
 		switch r {
 		case '"':
-			buffer.WriteRune('\\')
-			buffer.WriteRune('"')
+			buffer.AppendRune('\\')
+			buffer.AppendRune('"')
 		case '\\':
-			buffer.WriteRune('\\')
-			buffer.WriteRune('\\')
+			buffer.AppendRune('\\')
+			buffer.AppendRune('\\')
 		case ']':
-			buffer.WriteRune('\\')
-			buffer.WriteRune(']')
+			buffer.AppendRune('\\')
+			buffer.AppendRune(']')
 		default:
-			buffer.WriteRune(r)
+			buffer.AppendRune(r)
 		}
 	}
 }

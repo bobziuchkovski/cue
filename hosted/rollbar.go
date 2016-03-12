@@ -101,7 +101,7 @@ func (r Rollbar) formatBody(buffer format.Buffer, event *cue.Event) {
 			Language: "go",
 		},
 	})
-	buffer.Write(marshalled)
+	buffer.Append(marshalled)
 }
 
 func (r Rollbar) formatMessage(event *cue.Event) json.RawMessage {

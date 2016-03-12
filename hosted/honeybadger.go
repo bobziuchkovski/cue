@@ -81,7 +81,7 @@ func (h Honeybadger) formatBody(buffer format.Buffer, event *cue.Event) {
 		},
 	}
 	marshalled, _ := json.Marshal(post)
-	buffer.Write(marshalled)
+	buffer.Append(marshalled)
 }
 
 func (h Honeybadger) requestFor(event *cue.Event) honeybadgerRequest {

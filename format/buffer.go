@@ -69,17 +69,17 @@ type Buffer interface {
 	// slice is retained.
 	Reset()
 
-	// Write appends the byte slice value to the buffer.
-	Write(value []byte)
+	// Append appends the byte slice value to the buffer.
+	Append(value []byte)
 
-	// WriteByte appends the byte value to the buffer.
-	WriteByte(value byte)
+	// AppendByte appends the byte value to the buffer.
+	AppendByte(value byte)
 
-	// WriteRune appends the rune value to the buffer.
-	WriteRune(value rune)
+	// AppendRune appends the rune value to the buffer.
+	AppendRune(value rune)
 
-	// WriteString appends the string value to the buffer.
-	WriteString(value string)
+	// AppendString appends the string value to the buffer.
+	AppendString(value string)
 }
 
 type buffer struct {
@@ -122,28 +122,28 @@ func (b *buffer) Len() int {
 	return len(b.bytes)
 }
 
-func (b *buffer) WriteByte(value byte) {
+func (b *buffer) AppendByte(value byte) {
 	b.ensureCapacity(1)
 	b.bytes = append(b.bytes, value)
 }
 
-func (b *buffer) WriteRune(value rune) {
+func (b *buffer) AppendRune(value rune) {
 	if value < utf8.RuneSelf {
-		b.WriteByte(byte(value))
+		b.AppendByte(byte(value))
 		return
 	}
 	size := utf8.EncodeRune(b.runebuf[:], value)
-	b.Write(b.runebuf[:size])
+	b.Append(b.runebuf[:size])
 }
 
-func (b *buffer) WriteString(value string) {
+func (b *buffer) AppendString(value string) {
 	origlen := len(b.bytes)
 	b.ensureCapacity(len(value))
 	b.bytes = b.bytes[:origlen+len(value)]
 	copy(b.bytes[origlen:], value)
 }
 
-func (b *buffer) Write(value []byte) {
+func (b *buffer) Append(value []byte) {
 	origlen := len(b.bytes)
 	b.ensureCapacity(len(value))
 	b.bytes = b.bytes[:origlen+len(value)]

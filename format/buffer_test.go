@@ -39,7 +39,7 @@ func TestBufferWrite(t *testing.T) {
 	for i := 0; i < 255; i++ {
 		slice = append(slice, byte(i))
 	}
-	buf.Write(slice)
+	buf.Append(slice)
 
 	result := buf.Bytes()
 	if len(result) != 255 {
@@ -54,16 +54,16 @@ func TestBufferWrite(t *testing.T) {
 
 func TestBufferWriteString(t *testing.T) {
 	buf := newBuffer()
-	buf.WriteString("hello")
-	buf.WriteString(" ")
-	buf.WriteString("world")
+	buf.AppendString("hello")
+	buf.AppendString(" ")
+	buf.AppendString("world")
 	if string(buf.Bytes()) != "hello world" {
 		t.Errorf("Expected buffer contents to be %q, not %q", "hello world", string(buf.Bytes()))
 	}
 
 	buf = newBuffer()
 	longstr := strings.Repeat("hello", 1000)
-	buf.WriteString(longstr)
+	buf.AppendString(longstr)
 	if string(buf.Bytes()) != longstr {
 		t.Errorf("Expected buffer contents to be %q, not %q", longstr, string(buf.Bytes()))
 	}
@@ -71,19 +71,19 @@ func TestBufferWriteString(t *testing.T) {
 
 func TestBufferWriteRune(t *testing.T) {
 	buf := newBuffer()
-	buf.WriteRune('日')
-	buf.WriteRune('本')
+	buf.AppendRune('日')
+	buf.AppendRune('本')
 	if string(buf.Bytes()) != "日本" {
 		t.Errorf("Expected buffer contents to be %q, not %q", "hello", string(buf.Bytes()))
 	}
 
 	buf = newBuffer()
 	for i := 0; i < 1000; i++ {
-		buf.WriteRune('h')
-		buf.WriteRune('e')
-		buf.WriteRune('l')
-		buf.WriteRune('l')
-		buf.WriteRune('o')
+		buf.AppendRune('h')
+		buf.AppendRune('e')
+		buf.AppendRune('l')
+		buf.AppendRune('l')
+		buf.AppendRune('o')
 	}
 	longstr := strings.Repeat("hello", 1000)
 	if string(buf.Bytes()) != longstr {
@@ -94,7 +94,7 @@ func TestBufferWriteRune(t *testing.T) {
 func TestWriteByte(t *testing.T) {
 	buf := newBuffer()
 	for i := 0; i < 255; i++ {
-		buf.WriteByte(byte(i))
+		buf.AppendByte(byte(i))
 	}
 
 	result := buf.Bytes()
@@ -114,13 +114,13 @@ func TestBufferLen(t *testing.T) {
 		if buf.Len() != i {
 			t.Errorf("Expected length to equal i (%d), not %d", i, buf.Len())
 		}
-		buf.Write([]byte{byte(i)})
+		buf.Append([]byte{byte(i)})
 	}
 }
 
 func TestBufferReset(t *testing.T) {
 	buf := newBuffer()
-	buf.WriteString("test")
+	buf.AppendString("test")
 	buf.Reset()
 	if buf.Len() != 0 {
 		t.Errorf("Buffer should be 0 after reset, but it's %d instead", buf.Len())

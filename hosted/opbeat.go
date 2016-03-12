@@ -83,7 +83,7 @@ func (o Opbeat) formatBody(buffer format.Buffer, event *cue.Event) {
 		},
 	}
 	marshalled, _ := json.Marshal(post)
-	buffer.Write(marshalled)
+	buffer.Append(marshalled)
 }
 
 func (o Opbeat) culpritFor(event *cue.Event) string {

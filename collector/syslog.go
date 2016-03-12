@@ -323,12 +323,12 @@ func localSyslog() (network string, address string, err error) {
 }
 
 func formatBOM(buf format.Buffer, event *cue.Event) {
-	buf.Write(rfc5424BOM)
+	buf.Append(rfc5424BOM)
 }
 
 func priFormatter(facility Facility) format.Formatter {
 	return func(buf format.Buffer, event *cue.Event) {
-		buf.WriteString(fmt.Sprintf("<%d>", priorityFor(facility, event.Level)))
+		buf.AppendString(fmt.Sprintf("<%d>", priorityFor(facility, event.Level)))
 	}
 }
 

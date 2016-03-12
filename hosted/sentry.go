@@ -96,7 +96,7 @@ func (s Sentry) formatBody(buffer format.Buffer, event *cue.Event) {
 	}
 
 	marshalled, _ := json.Marshal(post)
-	buffer.Write(marshalled)
+	buffer.Append(marshalled)
 }
 
 func (s Sentry) exceptionFor(event *cue.Event) *sentryException {
@@ -227,11 +227,11 @@ func (tag sentryTag) MarshalJSON() ([]byte, error) {
 func formatSentryAuth(public, private string) string {
 	auth := format.GetBuffer()
 	defer format.ReleaseBuffer(auth)
-	auth.WriteString(fmt.Sprintf("Sentry sentry_version=%d, ", sentryVersion))
-	auth.WriteString(fmt.Sprintf("sentry_client=github.com/bobziuchkovski/cue:%d.%d.%d, ", cue.Version.Major, cue.Version.Minor, cue.Version.Patch))
-	auth.WriteString(fmt.Sprintf("sentry_timestamp=%d, ", time.Now().UTC().Unix()))
-	auth.WriteString(fmt.Sprintf("sentry_key=%s, ", public))
-	auth.WriteString(fmt.Sprintf("sentry_secret=%s", private))
+	auth.AppendString(fmt.Sprintf("Sentry sentry_version=%d, ", sentryVersion))
+	auth.AppendString(fmt.Sprintf("sentry_client=github.com/bobziuchkovski/cue:%d.%d.%d, ", cue.Version.Major, cue.Version.Minor, cue.Version.Patch))
+	auth.AppendString(fmt.Sprintf("sentry_timestamp=%d, ", time.Now().UTC().Unix()))
+	auth.AppendString(fmt.Sprintf("sentry_key=%s, ", public))
+	auth.AppendString(fmt.Sprintf("sentry_secret=%s", private))
 	return string(auth.Bytes())
 }
 
