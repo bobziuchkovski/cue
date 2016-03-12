@@ -140,9 +140,14 @@ func checkOpbeatEvent(t *testing.T, event *cue.Event, expected string) {
 	if cuetest.NestedFetch(requestJSON, "machine", "hostname") == "!(MISSING)" {
 		t.Error("Hostname is missing from request")
 	}
+	if cuetest.NestedFetch(requestJSON, "timestamp") == "!(MISSING)" {
+		t.Error("Timestamp is missing from request")
+	}
 
 	cuetest.NestedDelete(requestJSON, "machine", "hostname")
 	cuetest.NestedDelete(expectedJSON, "machine", "hostname")
+	cuetest.NestedDelete(requestJSON, "timestamp")
+	cuetest.NestedDelete(expectedJSON, "timestamp")
 	cuetest.NestedCompare(t, requestJSON, expectedJSON)
 }
 

@@ -166,11 +166,21 @@ func checkRollbarEvent(t *testing.T, event *cue.Event, expected string) {
 	if cuetest.NestedFetch(requestJSON, "data", "server", "host") == "!(MISSING)" {
 		t.Error("Server host is missing from request")
 	}
+	if cuetest.NestedFetch(requestJSON, "data", "platform") == "!(MISSING)" {
+		t.Error("Platform is missing from request")
+	}
+	if cuetest.NestedFetch(requestJSON, "data", "timestamp") == "!(MISSING)" {
+		t.Error("Timestamp is missing from request")
+	}
 
 	cuetest.NestedDelete(requestJSON, "data", "notifier", "version")
 	cuetest.NestedDelete(expectedJSON, "data", "notifier", "version")
 	cuetest.NestedDelete(requestJSON, "data", "server", "host")
 	cuetest.NestedDelete(expectedJSON, "data", "server", "host")
+	cuetest.NestedDelete(requestJSON, "data", "platform")
+	cuetest.NestedDelete(expectedJSON, "data", "platform")
+	cuetest.NestedDelete(requestJSON, "data", "timestamp")
+	cuetest.NestedDelete(expectedJSON, "data", "timestamp")
 	cuetest.NestedCompare(t, requestJSON, expectedJSON)
 }
 

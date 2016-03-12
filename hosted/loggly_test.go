@@ -61,7 +61,7 @@ func TestLoggly(t *testing.T) {
 	}
 	cuetest.CloseCollector(c)
 
-	pattern := `<167>1 2006-01-02T15:04:00.000000-\d{2}:\d{2} \S+ testapp testapp\[\d+\] - \[test@41058 tag="tag1" tag="tag2"\] debug event {"k1":"some value","k2":2,"k3":3.5,"k4":true}\n`
+	pattern := `<167>1 2006-01-02T15:04:00.000000(Z|[-+]\d{2}:\d{2}) \S+ testapp testapp\[\d+\] - \[test@41058 tag="tag1" tag="tag2"\] debug event {"k1":"some value","k2":2,"k3":3.5,"k4":true}\n`
 	re := regexp.MustCompile(pattern)
 
 	if !re.Match(recorder.Contents()) {

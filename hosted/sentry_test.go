@@ -191,11 +191,16 @@ func checkSentryEvent(t *testing.T, event *cue.Event, expected string) {
 	if cuetest.NestedFetch(requestJSON, "server_name") == "!(MISSING)" {
 		t.Error("server_name is missing from request")
 	}
+	if cuetest.NestedFetch(requestJSON, "timestamp") == "!(MISSING)" {
+		t.Error("timestamp is missing from request")
+	}
 
 	cuetest.NestedDelete(requestJSON, "event_id")
 	cuetest.NestedDelete(expectedJSON, "event_id")
 	cuetest.NestedDelete(requestJSON, "server_name")
 	cuetest.NestedDelete(expectedJSON, "server_name")
+	cuetest.NestedDelete(requestJSON, "timestamp")
+	cuetest.NestedDelete(expectedJSON, "timestamp")
 	cuetest.NestedCompare(t, requestJSON, expectedJSON)
 }
 

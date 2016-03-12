@@ -261,7 +261,7 @@ func TestFacilityString(t *testing.T) {
 
 func checkSyslogContents(t *testing.T, app string, facility Facility, content string, event *cue.Event) {
 	pri := 8*int(facility) + int(severityFor(event.Level))
-	pattern := fmt.Sprintf("^<%d>2006-01-02T15:04:00-\\d{2}:\\d{2} \\S+ %s\\[\\d+\\]:[^\\n]*\\n$", pri, app)
+	pattern := fmt.Sprintf("^<%d>2006-01-02T15:04:00(Z|[-+]\\d{2}:\\d{2}) \\S+ %s\\[\\d+\\]:[^\\n]*\\n$", pri, app)
 	re := regexp.MustCompile(pattern)
 	if !re.MatchString(content) {
 		t.Errorf("Content %q doesn't match pattern %q", content, pattern)
@@ -270,7 +270,7 @@ func checkSyslogContents(t *testing.T, app string, facility Facility, content st
 
 func checkStructuredSyslogContents(t *testing.T, app string, facility Facility, id string, content string, event *cue.Event) {
 	pri := 8*int(facility) + int(severityFor(event.Level))
-	pattern := fmt.Sprintf("^<%d>1 2006-01-02T15:04:00.000000-\\d{2}:\\d{2} \\S+ %s %s\\[\\d+\\] - \\[%s[^\\n]*?\\][^\\n]*\\n$", pri, app, app, id)
+	pattern := fmt.Sprintf("^<%d>1 2006-01-02T15:04:00.000000(Z|[-+]\\d{2}:\\d{2}) \\S+ %s %s\\[\\d+\\] - \\[%s[^\\n]*?\\][^\\n]*\\n$", pri, app, app, id)
 	re := regexp.MustCompile(pattern)
 	if !re.MatchString(content) {
 		t.Errorf("Content %q doesn't match pattern %q", content, pattern)
