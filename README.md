@@ -27,282 +27,163 @@ _Cue makes use of sync/atomic.Value and thus requires Go 1.4.x or later._
 
 ## Basic Use
 
-Logging instances are created via the NewLogger function.  A simple convention
-is to initialize an unexported package logger:
+Please see the [godocs](https://godoc.org/github.com/bobziuchkovski/cue) for
+additional information.
+
+This example shows how to register the terminal collector (stdout) and log a few
+messages at various levels.
 
 ```go
-	var log = cue.NewLogger("some/package/name")
-```
+package main
 
-Additional context information may be added to the package logger via the
-log.WithValue and log.WithFields methods:
+import (
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/collector"
+	"os"
+)
 
-```go
-	func DoSomething(user string) {
-		log.WithValue("user", user).Info("Doing something")
-	}
+var log = cue.NewLogger("main")
 
-	func DoSomethingElse(user string, authorized bool) {
-		log.WithFields(cue.Fields{
-			"user": user,
-			"authorized": authorized,
-		}).Info("Something else requested")
-	}
-```
+func main() {
+	cue.Collect(cue.INFO, collector.Terminal{}.New())
 
-Loggers may also be associated with object instances:
+	log.Debug("Debug message -- a quick no-op since our collector is registered at INFO level")
+	log.Info("Info message")
+	log.Warn("Warn message")
 
-```go
-	type Item struct {
-		key string
-		log cue.Logger
-	}
-
-	func NewItem(key string) *Item {
-		return &Item{
-			key: key,
-			log: log.WithValue("item_key", key)
-		}
-	}
-
-	func (item *Item) DoSomething() {
-		// The event context will include the "item_key" set above
-		item.log.Warn("Doing something important")
-	}
-```
-
-## Error Logging and Recovery
-
-Cue simplifies error reporting by logging the given error and message, and then
-returning the same error value.  Hence you can return the log.Error/log.Errorf
-values in-line:
-
-```go
-	filename := "somefile"
-	f, err := os.Create(filename)
+	host, err := os.Hostname()
 	if err != nil {
-		return log.Errorf(err, "Failed to create %q", filename)
+		log.Error(err, "Failed to retrieve hostname")
+	} else {
+		log.Infof("My hostname is %s", host)
 	}
+
+	// The output looks something like:
+	// Mar 13 12:40:10 INFO example_basic_test.go:20 Info message
+	// Mar 13 12:40:10 WARN example_basic_test.go:21 Warn message
+	// Mar 13 12:40:10 INFO example_basic_test.go:27 My hostname is pegasus.bobbyz.org
+
+	// The formatting could be changed by passing a different formatter to collector.Terminal.
+	// see the cue/format docs for details
+}
 ```
 
-Cue provides Collector implementations for popular error reporting services
-such as Honeybadger, Rollbar, Sentry, and Opbeat.  If one of these collector
-implementations were registered, the above code would automatically open a new
-error report, complete with stack trace and context information from the logger
-instance.  See [cue/hosted](https://godoc.org/github.com/bobziuchkovski/cue/hosted)
-for details.
+## Error Reporting
 
-Finally, cue provides convenience methods for panic and recovery. Calling Panic
-or Panicf will log the provided message at the FATAL level and then panic.
-Calling Recover recovers from panics and logs the recovered value and message
-at the FATAL level.
+Please see the [godocs](https://godoc.org/github.com/bobziuchkovski/cue) for
+additional information.
+
+This example uses cue/hosted.Honeybadger to report error events to Honeybadger.
 
 ```go
-	func doSomething() {
-		defer log.Recover("Recovered panic in doSomething")
-		doSomethingThatPanics()
-	}
+package main
+
+import (
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/hosted"
+	"os"
+	"time"
+)
+
+var log = cue.NewLogger("main")
+
+func main() {
+	// Here we're assuming the Honeybadger API key is stored via environment
+	// variable, as well as an APP_ENV variable specifying "test", "production", etc.
+	cue.CollectAsync(cue.ERROR, 10000, hosted.Honeybadger{
+		Key:         os.Getenv("HONEYBADGER_KEY"),
+		Environment: os.Getenv("APP_ENV"),
+	}.New())
+
+	// We want to collect more stack frames for error and panic events so that
+	// our Honeybadger incidents show us enough stack trace to troubleshoot.
+	cue.SetFrames(1, 32)
+
+	// We use Close to flush the asynchronous buffer.  This way we won't
+	// lose error reports if one is in the process of sending when the program
+	// is terminating.
+	defer cue.Close(5 * time.Second)
+
+	// If something panics, it will automatically open a Honeybadger event
+	// when recovered by this line
+	defer log.Recover("Recovered panic")
+
+	// Force a panic
+	PanickingFunc()
+}
+
+func PanickingFunc() {
+	panic("This will be reported to Honeybadger")
+}
 ```
 
-If a panic is triggered via a cue logger instance's Panic or Panicf methods,
-Recover recovers from the panic but suppresses the event to prevent
-duplication.
+## Features
 
-## Event Collection
+Please see the [godocs](https://godoc.org/github.com/bobziuchkovski/cue) for
+additional information.
 
-Cue decouples event generation from event collection.  Library and framework
-authors may generate log events without concern for the details of collection.
-Event collection is opt-in -- no collectors are registered by default.
-
-Event collection, if enabled, should be configured close to a program's main
-package/function, not by libraries.  This gives the event subscriber complete
-control over the behavior of event collection.
-
-Collectors are registered via the Collect and CollectAsync functions.  Each
-collector is registered for a given level threshold.  The threshold for a
-collector may be updated at any time using the SetLevel function.
-
-Collect registers fully synchronous event collectors.  Logging calls that match
-a synchronous collector's threshold block until the collector's Collect method
-returns successfully.  This is dangerous if the Collector performs any
-operations that block or return errors.  However, it's simple to use and
-understand:
+This example shows quite a few of the cue features: logging to a file that
+reopens on SIGHUP (for log rotation), logging colored output to stdout,
+logging to syslog, and reporting errors to Honeybadger.
 
 ```go
-	package main
+package main
 
-	import (
-		"github.com/bobziuchkovski/cue"
-		"github.com/bobziuchkovski/cue/collector"
-	)
+import (
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/collector"
+	"github.com/bobziuchkovski/cue/format"
+	"github.com/bobziuchkovski/cue/hosted"
+	"os"
+	"syscall"
+	"time"
+)
 
-	var log = cue.NewLogger("main")
+var log = cue.NewLogger("main")
 
-	func main() {
-		// Follow a 12-factor approach and log unbuffered to stdout.
-		// See http://12factor.net for details.
-		cue.Collect(cue.INFO, collector.Terminal{}.New())
-		defer log.Recover("Recovered from panic in main")
+func main() {
+	// defer cue.Close before log.Recover so that Close flushes any events
+	// triggers by panic recovery
+	defer cue.Close(5 * time.Second)
+	defer log.Recover("Recovered panic in main")
+	ConfigureLogging()
+	RunTheProgram()
+}
 
-		RunTheProgram()
-	}
+func ConfigureLogging() {
+	// Collect logs to stdout in color!  :)
+	cue.Collect(cue.DEBUG, collector.Terminal{
+		Formatter: format.HumanReadableColors,
+	}.New())
+
+	// Collect to app.log and reopen the handle if we receive SIGHUP
+	cue.Collect(cue.INFO, collector.File{
+		Path:         "app.log",
+		ReopenSignal: syscall.SIGHUP,
+	}.New())
+
+	// Collect to syslog
+	cue.Collect(cue.WARN, collector.Syslog{
+		App:      "app",
+		Facility: collector.LOCAL7,
+	}.New())
+
+	// Report errors asynchronously to Honeybadger.  If HONEYBADGER_KEY is
+	// unset, Honeybadger.New will return nil and cue.CollectAsync will
+	// ignore it.  This works great for development.
+	cue.CollectAsync(cue.ERROR, 10000, hosted.Honeybadger{
+		Key:         os.Getenv("HONEYBADGER_KEY"),
+		Environment: os.Getenv("APP_ENV"),
+	}.New())
+	cue.SetFrames(1, 32)
+}
+
+func RunTheProgram() {
+	log.Info("Running the program!")
+	panic("Whoops, there's no program to run!")
+}
 ```
 
-CollectAsync registers asynchronous collectors.  It creates a buffered channel
-for the collector and starts a worker goroutine to service events.  Logging
-calls return after queuing events to the collector channel.  If the channel's
-buffer is full, the event is dropped and a drop counter is incremented
-atomically.  This ensures asynchronous logging calls never block.  The worker
-goroutine detects changes in the atomic drop counter and surfaces drop events
-as collector errors.  See [cue/collector](https://godoc.org/github.com/bobziuchkovski/cue/collector)
-for details on collector error handling.
-
-When asynchronous logging is enabled, Close must be called to flush queued
-events on program termination.  Close is safe to call even if asynchronous
-logging isn't enabled -- it returns immediately if no events are queued.
-Note that `ctrl+c` and `kill <pid>` terminate Go programs without triggering
-cleanup code.  When using asynchronous logging, it's a good idea to register
-signal handlers to capture SIGINT (`ctrl+c`) and SIGTERM (`kill <pid>`).  See
-[os/signal](https://godoc.org/os/signal) for details.
-
-```go
-	package main
-
-	import (
-		"github.com/bobziuchkovski/cue"
-		"github.com/bobziuchkovski/cue/collector"
-		"time"
-	)
-
-	var log = cue.NewLogger("main")
-
-	func main() {
-		// Use async logging to local syslog
-		cue.CollectAsync(cue.INFO, 10000, collector.Syslog{
-			App: "theapp",
-			Facility: collector.LOCAL0,
-		}.New())
-
-		// Close/flush buffered events on program termination.
-		// Note that this won't fire if ctrl+c is used or kill <pid>.  You need
-		// to install signal handlers for SIGINT/SIGTERM to handle those cases.
-		defer cue.Close(5 * time.Second)
-
-		defer log.Recover("Recovered from panic in main")
-		RunTheProgram()
-	}
-```
-
-## Stack Frame Collection
-
-By default, cue collects a single stack frame for any event that matches a
-registered collector.  This ensures collectors may log the file name, package,
-and line number for any collected event.  SetFrames may be used to alter this
-frame count, or disable frame collection entirely.  See the
-[SetFrames](https://godoc.org/github.com/bobziuchkovski/cue#SetFrames) function
-for details.
-
-When using error reporting services, SetFrames should be used to increase the
-errorFrames parameter from the default value of 1 to a value that provides
-enough stack context to successfully diagnose reported errors.
-
-```go
-	package main
-
-	import (
-		"github.com/bobziuchkovski/cue"
-		"github.com/bobziuchkovski/cue/collector"
-		"github.com/bobziuchkovski/cue/hosted"
-		"os"
-		"strings"
-		"time"
-	)
-
-	var log = cue.NewLogger("main")
-
-	func main() {
-		// Send WARN, ERROR, and FATAL synchronously to stdout
-		cue.Collect(cue.WARN, collector.Terminal{}.New())
-
-		// Send ERROR and FATAL asynchronously to Honeybadger, ensuring we get
-		// enough context on the Honeybadger stack traces.  We use a large async
-		// buffer just in case Honeybadger experiences a service disruption.
-		cue.SetFrames(1, 32)
-		cue.CollectAsync(cue.ERROR, 10000, hosted.Honeybadger{
-			Key: os.Getenv("HONEYBADGER_KEY"),
-
-		    // Optional
-	        Tags: strings.Split(os.Getenv("HONEYBADGER_TAGS"), ","),
-	        ExtraContext: cue.NewContext("extra").WithFields(cue.Fields{
-	            "foo": "bar",
-	            "frobble": 42,
-	        }),
-	        Environment: os.Getenv("APP_ENV"),
-		}.New())
-
-		// Close/flush buffered events on program termination.
-		// Note that this won't fire if ctrl+c is used or kill <pid>.  You need
-		// to install signal handlers for SIGINT/SIGTERM to handle those cases.
-		defer cue.Close(5 * time.Second)
-
-		defer log.Recover("Recovered from panic in main")
-		RunTheProgram()
-	}
-```
-
-Since we're using an async collector for Honeybadger, we still need cue.Close.
-Otherwise a recovered panic might not post to Honeybadger prior to the main
-func exiting.
-
-There are several more items of interest in the above example:
-
-1. We register the terminal collector before the Honeybadger collector.  This
-   will surface any warnings emitted by the Honeybadger.New method.
-2. If the HONEYBADGER_KEY environment variable isn't set, that collector will
-   emit a warning event and return nil.  All of the built-in collectors emit
-   warning log events if required parameters are missing.
-3. If cue.Collect or cue.CollectAsync are called with a nil collector, they
-   simply return without doing anything.  Hence the above would be safe to run
-   even if HONEYBADGER_KEY is unset.
-
-## Formatting
-
-Collectors use Formatter functions to format message output.  The default
-formatters are pretty sane, but it's easy to implement custom formats.  See
-[cue/format](https://godoc.org/github.com/bobziuchkovski/cue/format)
-for details.
-
-## Colors!
-
-People love colors.  Cue comes with a Colorize function in the format package
-that wraps and colorizes an existing formatter, selecting colors by log level.
-The format package also provides a HumanReadableColors pre-defined format for
-conveninence.
-
-```go
-	package main
-
-	import (
-		"github.com/bobziuchkovski/cue"
-		"github.com/bobziuchkovski/cue/collector"
-		"github.com/bobziuchkovski/cue/format"
-	)
-
-	var log = cue.NewLogger("main")
-
-	func main() {
-		// Log to stdout...with colors!
-		cue.Collect(cue.DEBUG, collector.Terminal{
-			Formatter: format.HumanReadableColors,
-		}.New())
-
-		defer log.Recover("Recovered from panic in main")
-		RunTheProgram()
-	}
-```
-
-Please don't enable this in production.  Those escape codes buried in log
-files annoy the heck out of ops/devops folk.
 
 ## Documentation
 

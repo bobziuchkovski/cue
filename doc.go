@@ -57,24 +57,9 @@ log.WithValue and log.WithFields methods:
 		}).Info("Something else requested")
 	}
 
-Loggers may also be associated with object instances:
+Depending on the collector and log format, output would look something like:
 
-	type Item struct {
-		key string
-		log cue.Logger
-	}
-
-	func NewItem(key string) *Item {
-		return &Item{
-			key: key,
-			log: log.WithValue("item_key", key)
-		}
-	}
-
-	func (item *Item) DoSomething() {
-		// The event context will include the "item_key" set above
-		item.log.Warn("Doing something important")
-	}
+	<DATE> INFO Something else requested user=<user> authorized=<authorized>
 
 Error Logging and Recovery
 
@@ -105,8 +90,8 @@ at the FATAL level.
 	}
 
 If a panic is triggered via a cue logger instance's Panic or Panicf methods,
-Recover recovers from the panic but suppresses the event to prevent
-duplication.
+Recover recovers from the panic but only emits the single event from the
+Panic/Panicf method.
 
 Event Collection
 
