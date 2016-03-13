@@ -89,7 +89,8 @@ Cue provides Collector implementations for popular error reporting services
 such as Honeybadger, Rollbar, Sentry, and Opbeat.  If one of these collector
 implementations were registered, the above code would automatically open a new
 error report, complete with stack trace and context information from the logger
-instance.  See the cue/hosted package for details.
+instance.  See [cue/hosted](https://godoc.org/github.com/bobziuchkovski/cue/hosted)
+for details.
 
 Finally, cue provides convenience methods for panic and recovery. Calling Panic
 or Panicf will log the provided message at the FATAL level and then panic.
@@ -153,16 +154,16 @@ calls return after queuing events to the collector channel.  If the channel's
 buffer is full, the event is dropped and a drop counter is incremented
 atomically.  This ensures asynchronous logging calls never block.  The worker
 goroutine detects changes in the atomic drop counter and surfaces drop events
-as collector errors.  See the cue/collector docs for details on collector
-error handling.
+as collector errors.  See [cue/collector](https://godoc.org/github.com/bobziuchkovski/cue/collector)
+for details on collector error handling.
 
 When asynchronous logging is enabled, Close must be called to flush queued
 events on program termination.  Close is safe to call even if asynchronous
 logging isn't enabled -- it returns immediately if no events are queued.
-Note that ctrl+c and kill <pid> terminate Go programs without triggering
+Note that `ctrl+c` and kill `<pid>` terminate Go programs without triggering
 cleanup code.  When using asynchronous logging, it's a good idea to register
-signal handlers to capture SIGINT (ctrl+c) and SIGTERM (kill <pid>).  See the
-os/signals package docs for details.
+signal handlers to capture SIGINT (`ctrl+c`) and SIGTERM (`kill <pid>`).  See
+[os/signal](https://godoc.org/os/signal) for details.
 
 ```go
 	package main
@@ -197,7 +198,8 @@ os/signals package docs for details.
 By default, cue collects a single stack frame for any event that matches a
 registered collector.  This ensures collectors may log the file name, package,
 and line number for any collected event.  SetFrames may be used to alter this
-frame count, or disable frame collection entirely.  See the SetFrames function
+frame count, or disable frame collection entirely.  See the
+[SetFrames](https://godoc.org/github.com/bobziuchkovski/cue#SetFrames) function
 for details.
 
 When using error reporting services, SetFrames should be used to increase the
@@ -266,8 +268,8 @@ There are several more items of interest in the above example:
 ## Formatting
 
 Collectors use Formatter functions to format message output.  The default
-formatters are pretty sane, but it's easy to implement custom formats.  See the
-[cue/format godocs](https://godoc.org/github.com/bobziuchkovski/cue/format)
+formatters are pretty sane, but it's easy to implement custom formats.  See
+[cue/format](https://godoc.org/github.com/bobziuchkovski/cue/format)
 for details.
 
 ## Colors!
@@ -300,12 +302,12 @@ conveninence.
 ```
 
 Please don't enable this in production.  Those escape codes buried in log
-files anooy the heck out of ops/devops folk.
+files annoy the heck out of ops/devops folk.
 
-## Additional Examples and Docs
+## Documentation
 
 Please see the [godocs](https://godoc.org/github.com/bobziuchkovski/cue) for
-additional examples and documentation.
+additional details.
 
 ## Authors
 
@@ -332,4 +334,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
