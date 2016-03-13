@@ -160,7 +160,7 @@ for details on collector error handling.
 When asynchronous logging is enabled, Close must be called to flush queued
 events on program termination.  Close is safe to call even if asynchronous
 logging isn't enabled -- it returns immediately if no events are queued.
-Note that `ctrl+c` and kill `<pid>` terminate Go programs without triggering
+Note that `ctrl+c` and `kill <pid>` terminate Go programs without triggering
 cleanup code.  When using asynchronous logging, it's a good idea to register
 signal handlers to capture SIGINT (`ctrl+c`) and SIGTERM (`kill <pid>`).  See
 [os/signal](https://godoc.org/os/signal) for details.
@@ -222,11 +222,11 @@ enough stack context to successfully diagnose reported errors.
 
 	func main() {
 		// Send WARN, ERROR, and FATAL synchronously to stdout
-		cue.Collect(cue.INFO, collector.Terminal{}.New())
+		cue.Collect(cue.WARN, collector.Terminal{}.New())
 
 		// Send ERROR and FATAL asynchronously to Honeybadger, ensuring we get
-		// enough context on the Honeybadger stack traces.  We use a large
-		// async buffer just in case Honeybadger experiences an outage.
+		// enough context on the Honeybadger stack traces.  We use a large async
+		// buffer just in case Honeybadger experiences a service disruption.
 		cue.SetFrames(1, 32)
 		cue.CollectAsync(cue.ERROR, 10000, hosted.Honeybadger{
 			Key: os.Getenv("HONEYBADGER_KEY"),
