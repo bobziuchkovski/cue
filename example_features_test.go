@@ -40,10 +40,11 @@ func ConfigureLogging() {
 		ReopenSignal: syscall.SIGHUP,
 	}.New())
 
-	// Collect to syslog
+	// Collect to syslog, formatting the context data as JSON for indexing.
 	cue.Collect(cue.WARN, collector.Syslog{
-		App:      "app",
-		Facility: collector.LOCAL7,
+		App:       "app",
+		Facility:  collector.LOCAL7,
+		Formatter: format.JSONMessage,
 	}.New())
 
 	// Report errors asynchronously to Honeybadger.  If HONEYBADGER_KEY is
@@ -58,5 +59,8 @@ func ConfigureLogging() {
 
 func RunTheProgram() {
 	log.Info("Running the program!")
-	panic("Whoops, there's no program to run!")
+	log.WithFields(cue.Fields{
+		"sad":    true,
+		"length": 0,
+	}).Panic("No program", "Whoops, there's no program to run!")
 }
