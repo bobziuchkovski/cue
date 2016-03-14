@@ -30,8 +30,8 @@ _Cue makes use of sync/atomic.Value and thus requires Go 1.4.x or later._
 Please see the [godocs](https://godoc.org/github.com/bobziuchkovski/cue) for
 additional information.
 
-This example shows how to register the terminal collector (stdout) and log a few
-messages at various levels.
+This example logs to both the terminal (stdout) and to file. If the program
+receives SIGHUP, the file will be reopened.  This is useful for log rotation.
 
 ```go
 package main
@@ -40,12 +40,17 @@ import (
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/collector"
 	"os"
+	"syscall"
 )
 
 var log = cue.NewLogger("main")
 
 func main() {
 	cue.Collect(cue.INFO, collector.Terminal{}.New())
+	cue.Collect(cue.INFO, collector.File{
+		Path:         "app.log",
+		ReopenSignal: syscall.SIGHUP,
+	}.New())
 
 	log.Debug("Debug message -- a quick no-op since our collector is registered at INFO level")
 	log.Info("Info message")
@@ -59,11 +64,11 @@ func main() {
 	}
 
 	// The output looks something like:
-	// Mar 13 12:40:10 INFO example_basic_test.go:20 Info message
-	// Mar 13 12:40:10 WARN example_basic_test.go:21 Warn message
-	// Mar 13 12:40:10 INFO example_basic_test.go:27 My hostname is pegasus.bobbyz.org
+	// Mar 13 12:40:10 INFO example_basic_test.go:25 Info message
+	// Mar 13 12:40:10 WARN example_basic_test.go:26 Warn message
+	// Mar 13 12:40:10 INFO example_basic_test.go:31 My hostname is pegasus.bobbyz.org
 
-	// The formatting could be changed by passing a different formatter to collector.Terminal.
+	// The formatting may be changed by passing a different formatter to collector.Terminal.
 	// see the cue/format docs for details
 }
 ```
