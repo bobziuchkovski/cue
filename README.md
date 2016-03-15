@@ -253,7 +253,7 @@ met my primary objectives:
   However, there's nothing particularly *special* about how error reporting services work.  They are merely a form of error logging.
   I feel it's important to be able to log/collect application errors without needing to explicitly specify where to send them.
   Calling log.Error/log.Fatal/log.Recover should be enough to trigger the error report.  Where that error is sent should be
-  a configuration detail and not require additional service-specific API calls.
+  a configuration detail and shouldn't require additional service-specific API calls.
 3. **Contextual logging support**.  It's often valuable to know under what conditions application events trigger: the account that
   accessed a page, flags associated with the account, country of origin, etc.  Cue simplifies collection of these details via
   the Logger.WithFields and Logger.WithValues methods, and provides flexible formatting options for rendering these values,
