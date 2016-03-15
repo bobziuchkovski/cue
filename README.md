@@ -25,7 +25,7 @@ _Cue makes use of sync/atomic.Value and thus requires Go 1.4.x or later._
   and the [cue.Logger interface](https://godoc.org/github.com/bobziuchkovski/cue#Logger) to get started.
   The rest of the API is centered around log output configuration.
 - Supports both [fully synchronous](https://godoc.org/github.com/bobziuchkovski/cue#Collect) and
-  [fully asyncrhonous](https://godoc.org/github.com/bobziuchkovski/cue#CollectAsync) (guaranteed non-blocking) log collection.
+  [fully asynchronous](https://godoc.org/github.com/bobziuchkovski/cue#CollectAsync) (guaranteed non-blocking) log collection.
 - Supports a variety of log outputs:
   * [File](https://godoc.org/github.com/bobziuchkovski/cue/collector#File)
   * [Syslog](https://godoc.org/github.com/bobziuchkovski/cue/collector#Syslog)
