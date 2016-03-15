@@ -241,37 +241,35 @@ There are quite a few Go logging libraries that already exist.  Why create a new
 I didn't start with the intention of creating a new library, but I struggled to find an existing logging library that
 met my primary objectives:
 
-1. **Friendly to library authors**.  Many of the existing logging libraries write log output to stdout/stderr
-  or to file by default.  This makes life difficult on library authors because you're left either interfering
-  with your end user's logging configuration (explicitly changing logging library defaults), or omitting logging
-  altogether.  Cue addresses this by requiring explicit opt-in *by the end user* in order to collect logging output.
-  Hence library authors may log without concern for the details of log output.  If the end user doesn't configure
-  collection, the logging calls turn into quick no-ops.  Cue also aims to have a guaranteed stable API
-  (after v1.0 is release) and minimal (no) external dependencies, which is also a boon to library authors.
-2. **Built-in support for error reporting services**.  Error reporting services are incredibly valuable for production
+1. **Built-in support for error reporting services**.  Error reporting services are incredibly valuable for production
   applications.  They provide immediate notification and visibility into bugs that your end users are encountering.
   However, there's nothing particularly *special* about how error reporting services work.  They are merely a form of error logging.
   I feel it's important to be able to log/collect application errors without needing to explicitly specify where to send them.
   Calling log.Error/log.Fatal/log.Recover should be enough to trigger the error report.  Where that error is sent should be
   a configuration detail and shouldn't require additional service-specific API calls.
-3. **Contextual logging support**.  It's often valuable to know under what conditions application events trigger: the account that
+2. **Contextual logging support**.  It's often valuable to know under what conditions application events trigger: the account that
   accessed a page, flags associated with the account, country of origin, etc.  Cue simplifies collection of these details via
   the Logger.WithFields and Logger.WithValues methods, and provides flexible formatting options for rendering these values,
   including machine-parseable formats for search and indexing.  Furthermore, I have every intention of providing a bridge API to
   integrate contextual logging with the upstream "context" package depending on what happens with [this proposal](https://github.com/golang/go/issues/14660).
-4. **Asynchronous logging with guaranteed non-blocking behavior**.  When logging to third-party services, you don't want a
+3. **Asynchronous logging with guaranteed non-blocking behavior**.  When logging to third-party services, you don't want a
   service disruption to halt your entire application.  Unfortunately, many existing logging libraries obtain a global lock
   for logging calls and log synchronously.  This is low risk when logging to stdout, but high risk when logging to external
   services.  If those external services go down, your entire application may halt trying to acquire a logging mutex that's
   blocked trying to write to the downed service.
-5. **Low overhead**.  Developers should feel comfortable peppering their code with logging calls wherever there's value
+4. **Low overhead**.  Developers should feel comfortable peppering their code with logging calls wherever there's value
   in collecting the data.  They shouldn't need to worry about the overhead of those logging calls or bottlenecking on
   logging.  To that point, cue is carefully designed to avoid lock contention and to avoid excessive object allocation.
   Cue uses atomic operations to quickly prune logging calls that don't match registered collector thresholds
   (e.g. DEBUG logs in production).  Cue also reuses formatting buffers via a sync.Pool to reduce object allocations and
   garbage collection overhead.  Logging calls aren't free, but cue makes them as cheap as possible.
-6. **Has thorough test coverage**.  If you're peppering your code with calls to a logging API, you should feel comfortable
+5. **Has thorough test coverage**.  If you're peppering your code with calls to a logging API, you should feel comfortable
   that the API is well-tested and stable.  Many existing logging libraries have weak test coverage and lack API promises.
+6. **Friendly to library authors**.  Many of the existing logging libraries write log output to stdout/stderr
+  or to file by default.  This makes life difficult on library authors because you're left either interfering
+  with your end user's logging configuration (explicitly changing logging library defaults), or omitting logging
+  altogether.  Cue addresses this by requiring explicit opt-in *by the end user* in order to collect logging output.
+  Uncollected logging calls are no-ops.
 
 ## Documentation
 
