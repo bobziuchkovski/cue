@@ -91,17 +91,6 @@ type Logger interface {
 	// Errorf returns without emitting a log event.
 	Errorf(err error, format string, values ...interface{}) error
 
-	// Fatal logs the given error and message at the FATAL level and returns
-	// the same error value.  If err is nil, Fatal returns without emitting a
-	// log event.  Calling Fatal does not terminate program execution.
-	Fatal(err error, message string) error
-
-	// Fatalf logs the given error at the FATAL level using formatting rules
-	// from the fmt package and returns the same error value.  If err is nil,
-	// Fatalf returns without emitting a log event.  Calling Fatalf does not
-	// terminate program execution.
-	Fatalf(err error, format string, values ...interface{}) error
-
 	// Panic logs the given cause and message at the FATAL level and then
 	// calls panic(cause).  Panic does nothing is cause is nil.
 	Panic(cause interface{}, message string)
@@ -208,22 +197,6 @@ func (l *logger) Errorf(err error, format string, values ...interface{}) error {
 		return nil
 	}
 	l.sendf(ERROR, err, format, values...)
-	return err
-}
-
-func (l *logger) Fatal(err error, message string) error {
-	if err == nil {
-		return nil
-	}
-	l.send(FATAL, err, message)
-	return err
-}
-
-func (l *logger) Fatalf(err error, format string, values ...interface{}) error {
-	if err == nil {
-		return nil
-	}
-	l.sendf(FATAL, err, format, values...)
 	return err
 }
 

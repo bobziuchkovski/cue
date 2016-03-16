@@ -197,44 +197,6 @@ func TestLoggerErrorf(t *testing.T) {
 	checkEventExpectation(t, c.Captured()[0], ERROR, "Errorf Test", cause)
 }
 
-func TestLoggerFatal(t *testing.T) {
-	defer resetCue()
-	c := newCapturingCollector()
-	Collect(DEBUG, c)
-
-	cause := errors.New("Fatal Cause")
-	log := NewLogger("test")
-	result := log.Fatal(cause, "Fatal Test")
-	if result != cause {
-		t.Error("Expected to receive the same error cause as the return value but dind't")
-	}
-	log.Fatal(nil, "Fatal Test, nil")
-
-	if len(c.Captured()) != 1 {
-		t.Errorf("Expected only a single log event but received %d", len(c.Captured()))
-	}
-	checkEventExpectation(t, c.Captured()[0], FATAL, "Fatal Test", cause)
-}
-
-func TestLoggerFatalf(t *testing.T) {
-	defer resetCue()
-	c := newCapturingCollector()
-	Collect(DEBUG, c)
-
-	cause := errors.New("Fatalf Cause")
-	log := NewLogger("test")
-	result := log.Fatalf(cause, "Fatalf %s", "Test")
-	if result != cause {
-		t.Error("Expected to receive the same error cause as the return value but dind't")
-	}
-	log.Fatalf(nil, "Fatalf %s, nil", "Test")
-
-	if len(c.Captured()) != 1 {
-		t.Errorf("Expected only a single log event but received %d", len(c.Captured()))
-	}
-	checkEventExpectation(t, c.Captured()[0], FATAL, "Fatalf Test", cause)
-}
-
 func TestLoggerPanic(t *testing.T) {
 	defer resetCue()
 	c := newCapturingCollector()
@@ -532,8 +494,14 @@ func TestThresholds(t *testing.T) {
 	log.Warnf("Warnf %s", "event")
 	log.Error(errors.New("Error event"), "Error event")
 	log.Errorf(errors.New("Errorf event"), "Errorf %s", "event")
-	log.Fatal(errors.New("Fatal event"), "Fatal event")
-	log.Fatalf(errors.New("Fatalf event"), "Fatalf %s", "event")
+
+	cause := errors.New("panic cause")
+	callWithRecover(func() {
+		log.Panicf(cause, "Panicf %s", "event")
+	})
+	callWithRecover(func() {
+		log.Panic(cause, "Panic event")
+	})
 
 	if len(debugc.Captured()) != 10 {
 		t.Errorf("Expected collector at DEBUG threshold to receive 10 events, but it received %d instead", len(debugc.Captured()))
