@@ -110,8 +110,10 @@ type Logger interface {
 	// ReportRecovery logs the given cause and message at the FATAL level.
 	// If used, it should be called from a deferred function after that
 	// function has recovered from a panic.  In most cases, using the Recover
-	// method directly is simpler.  ReportRecovery does nothing if cause is
-	// nil.
+	// method directly is simpler.  However, sometimes it's necessary to test
+	// whether a panic occurred or not.  In those cases, it's easier to use
+	// the built-in recover() function and simply report the recovery via
+	// ReportRecovery.  ReportRecovery does nothing if cause is nil.
 	ReportRecovery(cause interface{}, message string)
 
 	// Wrap returns a logging instance that skips one additional frame when
