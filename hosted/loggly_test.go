@@ -22,11 +22,12 @@ package hosted
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"reflect"
 	"regexp"
 	"testing"
+
+	"github.com/bobziuchkovski/cue/collector"
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 func TestLogglyNilCollector(t *testing.T) {

@@ -22,14 +22,15 @@ package collector
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/format"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/format"
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 func TestHTTPNilCollector(t *testing.T) {

@@ -22,12 +22,13 @@ package collector
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/format"
 	"os"
 	"os/signal"
 	"sync"
 	"time"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/format"
 )
 
 // File represents configuration for file-based Collector instances. The default

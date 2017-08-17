@@ -7,11 +7,12 @@ package hosted_test
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"io/ioutil"
+	"os"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/collector"
 	"github.com/bobziuchkovski/cue/hosted"
-	"io/ioutil"
-	"os"
 )
 
 // This example demonstrates how to use Loggly with TLS transport encryption

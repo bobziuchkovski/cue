@@ -24,11 +24,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"runtime"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/collector"
 	"github.com/bobziuchkovski/cue/format"
-	"net/http"
-	"runtime"
 )
 
 // Rollbar represents configuration for the Rollbar service. Collected events

@@ -22,8 +22,9 @@ package collector
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue"
 	"net/http"
+
+	"github.com/bobziuchkovski/cue"
 )
 
 // HTTP represents configuration for http-based Collector instances. For each
