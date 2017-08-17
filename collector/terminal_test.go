@@ -22,10 +22,11 @@ package collector
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 const terminalDebugStr = "Jan  2 15:04:00 DEBUG file3.go:3 debug event k1=\"some value\" k2=2 k3=3.5 k4=true\n"

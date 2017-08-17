@@ -5,10 +5,11 @@
 package cue_test
 
 import (
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
 	"os"
 	"syscall"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/collector"
 )
 
 // This example logs to both the terminal (stdout) and to file.

@@ -5,10 +5,11 @@
 package cue_test
 
 import (
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/hosted"
 	"os"
 	"time"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/hosted"
 )
 
 // This example shows how to use error reporting services.

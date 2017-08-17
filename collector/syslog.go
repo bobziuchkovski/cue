@@ -24,12 +24,13 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/format"
 	"io"
 	"net"
 	"os"
 	"time"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/format"
 )
 
 var (

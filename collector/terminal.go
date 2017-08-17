@@ -21,9 +21,10 @@
 package collector
 
 import (
+	"os"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/format"
-	"os"
 )
 
 // Terminal represents configuration for stdout/stderr collection.  By

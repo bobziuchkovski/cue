@@ -22,10 +22,11 @@ package hosted
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"reflect"
 	"testing"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 const rollbarJSON = `

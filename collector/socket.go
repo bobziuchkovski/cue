@@ -23,9 +23,10 @@ package collector
 import (
 	"crypto/tls"
 	"fmt"
+	"net"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/format"
-	"net"
 )
 
 // Socket represents configuration for socket-based Collector instances. The

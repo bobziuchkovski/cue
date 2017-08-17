@@ -21,16 +21,19 @@
 package format
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/bobziuchkovski/cue"
 	"os"
+	"os/exec"
 	"reflect"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 	"unicode"
+
+	"github.com/bobziuchkovski/cue"
 )
 
 // Color codes for use with Colorize.
@@ -268,21 +271,18 @@ func Hostname(buffer Buffer, event *cue.Event) {
 	if err != nil {
 		name = "unknown"
 	}
-	idx := strings.Index(name, ".")
-	if idx != -1 {
-		name = name[:idx]
-	}
 	buffer.AppendString(name)
 }
 
 // FQDN writes the host's fully-qualified domain name (FQDN) to the buffer.
 // If the FQDN cannot be determined, "unknown" is written instead.
 func FQDN(buffer Buffer, event *cue.Event) {
-	name, err := os.Hostname()
-	if err != nil {
-		name = "unknown"
+	out, err := exec.Command("/bin/hostname", "-f").Output()
+	if err == nil {
+		buffer.Append(bytes.TrimSpace(out))
+	} else {
+		buffer.AppendString("unknown")
 	}
-	buffer.AppendString(name)
 }
 
 // Level writes event.Level.String() to the buffer.  Hence, it writes "INFO"

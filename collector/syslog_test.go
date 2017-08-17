@@ -24,11 +24,12 @@ import (
 	"bytes"
 	"crypto/tls"
 	"fmt"
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"os"
 	"regexp"
 	"testing"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 func TestSyslogNilCollector(t *testing.T) {

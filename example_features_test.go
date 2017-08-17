@@ -5,13 +5,14 @@
 package cue_test
 
 import (
+	"os"
+	"syscall"
+	"time"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/collector"
 	"github.com/bobziuchkovski/cue/format"
 	"github.com/bobziuchkovski/cue/hosted"
-	"os"
-	"syscall"
-	"time"
 )
 
 var log = cue.NewLogger("example")
