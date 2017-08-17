@@ -23,10 +23,11 @@ package hosted
 import (
 	"crypto/tls"
 	"fmt"
+	"io"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/collector"
 	"github.com/bobziuchkovski/cue/format"
-	"io"
 )
 
 const logglyNetwork = "tcp"

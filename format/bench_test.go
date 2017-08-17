@@ -21,8 +21,9 @@
 package format
 
 import (
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"testing"
+
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 func BenchmarkHumanReadable(b *testing.B) {

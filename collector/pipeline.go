@@ -22,8 +22,9 @@ package collector
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue"
 	"io"
+
+	"github.com/bobziuchkovski/cue"
 )
 
 // ContextFilter is used with a Pipeline to filter context key/value pairs.

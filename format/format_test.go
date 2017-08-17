@@ -21,12 +21,14 @@
 package format
 
 import (
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"bytes"
 	"os"
-	"strings"
+	"os/exec"
 	"testing"
 	"time"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 func TestRenderBytes(t *testing.T) {
@@ -148,15 +150,15 @@ func TestHostname(t *testing.T) {
 	if err != nil {
 		t.Errorf("Encountered unexpected error getting hostname: %s", err)
 	}
-	checkRendered(t, strings.Split(host, ".")[0], RenderString(Hostname, cuetest.DebugEvent))
+	checkRendered(t, host, RenderString(Hostname, cuetest.DebugEvent))
 }
 
 func TestFQDN(t *testing.T) {
-	host, err := os.Hostname()
+	out, err := exec.Command("/bin/hostname", "-f").Output()
 	if err != nil {
 		t.Errorf("Encountered unexpected error getting hostname: %s", err)
 	}
-	checkRendered(t, host, RenderString(FQDN, cuetest.DebugEvent))
+	checkRendered(t, string(bytes.TrimSpace(out)), RenderString(FQDN, cuetest.DebugEvent))
 }
 
 func TestLevel(t *testing.T) {

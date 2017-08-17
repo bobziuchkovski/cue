@@ -22,10 +22,11 @@ package collector
 
 import (
 	"fmt"
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"reflect"
 	"testing"
+
+	"github.com/bobziuchkovski/cue"
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 func TestPipelineContextFilter(t *testing.T) {

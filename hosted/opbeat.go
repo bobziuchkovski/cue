@@ -24,10 +24,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
+
 	"github.com/bobziuchkovski/cue"
 	"github.com/bobziuchkovski/cue/collector"
 	"github.com/bobziuchkovski/cue/format"
-	"net/http"
 )
 
 // Opbeat represents configuration for the Opbeat service.  Collected events

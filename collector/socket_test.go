@@ -23,8 +23,9 @@ package collector
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
 	"testing"
+
+	"github.com/bobziuchkovski/cue/internal/cuetest"
 )
 
 const socketEventStr = "Jan  2 15:04:00 DEBUG file3.go:3 debug event k1=\"some value\" k2=2 k3=3.5 k4=true"
