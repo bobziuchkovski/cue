@@ -21,7 +21,7 @@
 package collector
 
 import (
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 )
 
-var log = cue.NewLogger("github.com/bobziuchkovski/cue/collector")
+var log = cue.NewLogger("github.com/remerge/cue/collector")

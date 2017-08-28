@@ -33,7 +33,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 )
 
 // Color codes for use with Colorize.

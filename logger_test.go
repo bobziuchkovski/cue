@@ -452,14 +452,14 @@ func TestLoggerWrap(t *testing.T) {
 	source1 := c.Captured()[0].Frames[0]
 	source2 := c.Captured()[1].Frames[0]
 	source3 := c.Captured()[2].Frames[0]
-	thisfunc := "github.com/bobziuchkovski/cue.TestLoggerWrap"
-	if source1.Function != "github.com/bobziuchkovski/cue.TestLoggerWrap" {
+	thisfunc := "github.com/remerge/cue.TestLoggerWrap"
+	if source1.Function != "github.com/remerge/cue.TestLoggerWrap" {
 		t.Errorf("First event has incorrect source function.  Expected %s, Received %s", thisfunc, source1.Function)
 	}
-	if source2.Function == "github.com/bobziuchkovski/cue.TestLoggerWrap" {
+	if source2.Function == "github.com/remerge/cue.TestLoggerWrap" {
 		t.Errorf("Second event has incorrect source function.  Expected it NOT to match %s, but it matches.", thisfunc)
 	}
-	if source3.Function != "github.com/bobziuchkovski/cue.TestLoggerWrap" {
+	if source3.Function != "github.com/remerge/cue.TestLoggerWrap" {
 		t.Errorf("Third event has incorrect source function.  Expected %s, Received %s", thisfunc, source3.Function)
 	}
 }

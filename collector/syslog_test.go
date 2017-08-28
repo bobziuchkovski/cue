@@ -28,8 +28,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 func TestSyslogNilCollector(t *testing.T) {

@@ -46,7 +46,7 @@ func TestFrameFile(t *testing.T) {
 		t.Error("Failed to get current stack pointer")
 	}
 	frame := frameForPC(pc)
-	if !strings.HasSuffix(frame.File, "github.com/bobziuchkovski/cue/frame_test.go") {
+	if !strings.HasSuffix(frame.File, "github.com/remerge/cue/frame_test.go") {
 		t.Errorf("Expected frame.File() to have suffix with current file name, but it didn't.  frame.File: %s", frame.File)
 	}
 }
@@ -57,8 +57,8 @@ func TestFrameFunction(t *testing.T) {
 		t.Error("Failed to get current stack pointer")
 	}
 	frame := frameForPC(pc)
-	if frame.Function != "github.com/bobziuchkovski/cue.TestFrameFunction" {
-		t.Errorf("Frame function is incorrect.  Expected: %s, Received: %s", "github.com/bobziuchkovski/cue.TestFrameFunction", frame.Function)
+	if frame.Function != "github.com/remerge/cue.TestFrameFunction" {
+		t.Errorf("Frame function is incorrect.  Expected: %s, Received: %s", "github.com/remerge/cue.TestFrameFunction", frame.Function)
 	}
 }
 
@@ -68,8 +68,8 @@ func TestFramePackage(t *testing.T) {
 		t.Error("Failed to get current stack pointer")
 	}
 	frame := frameForPC(pc)
-	if frame.Package != "github.com/bobziuchkovski/cue" {
-		t.Errorf("Frame package is incorrect.  Expected: %s, Received: %s", "github.com/bobziuchkovski/cue", frame.Package)
+	if frame.Package != "github.com/remerge/cue" {
+		t.Errorf("Frame package is incorrect.  Expected: %s, Received: %s", "github.com/remerge/cue", frame.Package)
 	}
 }
 

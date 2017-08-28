@@ -26,9 +26,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/format"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/collector"
+	"github.com/remerge/cue/format"
 )
 
 // Opbeat represents configuration for the Opbeat service.  Collected events

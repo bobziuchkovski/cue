@@ -46,7 +46,7 @@ func ourPanic() bool {
 	copied := runtime.Callers(0, framebuf)
 	framebuf = framebuf[:copied]
 	for _, pc := range framebuf {
-		if frameForPC(pc).Function == "github.com/bobziuchkovski/cue.doPanic" {
+		if frameForPC(pc).Function == "github.com/remerge/cue.doPanic" {
 			return true
 		}
 	}

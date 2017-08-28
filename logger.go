@@ -32,8 +32,8 @@ import (
 var (
 	// We use the internal context and logger to report our own internal
 	// events, such as collector failures.
-	internalContext = NewContext("github.com/bobziuchkovski/cue")
-	internalLogger  = NewLogger("github.com/bobziuchkovski/cue")
+	internalContext = NewContext("github.com/remerge/cue")
+	internalLogger  = NewLogger("github.com/remerge/cue")
 
 	// Sending represents the number of sends currently in-process.
 	// It is updated atomically and used to safely terminate workers.

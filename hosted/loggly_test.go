@@ -26,8 +26,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue/collector"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 func TestLogglyNilCollector(t *testing.T) {

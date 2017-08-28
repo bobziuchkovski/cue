@@ -29,8 +29,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bobziuchkovski/cue/format"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue/format"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 const fileEventStr = "Jan  2 15:04:00 DEBUG file3.go:3 debug event k1=\"some value\" k2=2 k3=3.5 k4=true\n"

@@ -25,8 +25,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/format"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/format"
 )
 
 // Socket represents configuration for socket-based Collector instances. The

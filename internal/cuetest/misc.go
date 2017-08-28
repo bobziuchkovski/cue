@@ -21,7 +21,7 @@
 package cuetest
 
 import (
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 	"io"
 	"time"
 )

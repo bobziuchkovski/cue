@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 )
 
 // HTTP represents configuration for http-based Collector instances. For each
@@ -65,7 +65,7 @@ func (h *httpCollector) Collect(event *cue.Event) error {
 	if err != nil {
 		return err
 	}
-	request.Header.Set("User-Agent", fmt.Sprintf("github.com/bobziuchkovski/cue %d.%d.%d", cue.Version.Major, cue.Version.Minor, cue.Version.Patch))
+	request.Header.Set("User-Agent", fmt.Sprintf("github.com/remerge/cue %d.%d.%d", cue.Version.Major, cue.Version.Minor, cue.Version.Patch))
 	resp, err := h.Client.Do(request)
 	if resp != nil && resp.Body != nil {
 		defer resp.Body.Close()

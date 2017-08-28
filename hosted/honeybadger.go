@@ -26,9 +26,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/format"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/collector"
+	"github.com/remerge/cue/format"
 )
 
 // Honeybadger represents configuration for the Honeybadger service.  Collected
@@ -76,8 +76,8 @@ func (h Honeybadger) formatBody(buffer format.Buffer, event *cue.Event) {
 		Request: h.requestFor(event),
 		Server:  h.server(),
 		Notifier: honeybadgerNotifier{
-			Name:    "github.com/bobziuchkovski/cue",
-			URL:     "https://github.com/bobziuchkovski/cue",
+			Name:    "github.com/remerge/cue",
+			URL:     "https://github.com/remerge/cue",
 			Version: fmt.Sprintf("%d.%d.%d", cue.Version.Major, cue.Version.Minor, cue.Version.Patch),
 		},
 	}

@@ -27,8 +27,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 func TestRenderBytes(t *testing.T) {
@@ -170,17 +170,17 @@ func TestLevel(t *testing.T) {
 }
 
 func TestPackage(t *testing.T) {
-	checkRendered(t, "github.com/bobziuchkovski/cue/frame3", RenderString(Package, cuetest.DebugEvent))
+	checkRendered(t, "github.com/remerge/cue/frame3", RenderString(Package, cuetest.DebugEvent))
 	checkRendered(t, cue.UnknownPackage, RenderString(Package, cuetest.DebugEventNoFrames))
 }
 
 func TestFunction(t *testing.T) {
-	checkRendered(t, "github.com/bobziuchkovski/cue/frame3.function3", RenderString(Function, cuetest.DebugEvent))
+	checkRendered(t, "github.com/remerge/cue/frame3.function3", RenderString(Function, cuetest.DebugEvent))
 	checkRendered(t, cue.UnknownFunction, RenderString(Function, cuetest.DebugEventNoFrames))
 }
 
 func TestFile(t *testing.T) {
-	checkRendered(t, "/path/github.com/bobziuchkovski/cue/frame3/file3.go", RenderString(File, cuetest.DebugEvent))
+	checkRendered(t, "/path/github.com/remerge/cue/frame3/file3.go", RenderString(File, cuetest.DebugEvent))
 	checkRendered(t, cue.UnknownFile, RenderString(File, cuetest.DebugEventNoFrames))
 }
 

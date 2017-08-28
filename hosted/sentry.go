@@ -29,9 +29,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/format"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/collector"
+	"github.com/remerge/cue/format"
 )
 
 const sentryVersion = 7
@@ -229,7 +229,7 @@ func formatSentryAuth(public, private string) string {
 	auth := format.GetBuffer()
 	defer format.ReleaseBuffer(auth)
 	auth.AppendString(fmt.Sprintf("Sentry sentry_version=%d, ", sentryVersion))
-	auth.AppendString(fmt.Sprintf("sentry_client=github.com/bobziuchkovski/cue:%d.%d.%d, ", cue.Version.Major, cue.Version.Minor, cue.Version.Patch))
+	auth.AppendString(fmt.Sprintf("sentry_client=github.com/remerge/cue:%d.%d.%d, ", cue.Version.Major, cue.Version.Minor, cue.Version.Patch))
 	auth.AppendString(fmt.Sprintf("sentry_timestamp=%d, ", time.Now().UTC().Unix()))
 	auth.AppendString(fmt.Sprintf("sentry_key=%s, ", public))
 	auth.AppendString(fmt.Sprintf("sentry_secret=%s", private))

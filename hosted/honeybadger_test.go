@@ -25,8 +25,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 const honeybadgerJSON = `
@@ -34,18 +34,18 @@ const honeybadgerJSON = `
   "error": {
     "backtrace": [
       {
-        "file": "/path/github.com/bobziuchkovski/cue/frame3/file3.go",
-        "method": "github.com/bobziuchkovski/cue/frame3.function3",
+        "file": "/path/github.com/remerge/cue/frame3/file3.go",
+        "method": "github.com/remerge/cue/frame3.function3",
         "number": 3
       },
       {
-        "file": "/path/github.com/bobziuchkovski/cue/frame2/file2.go",
-        "method": "github.com/bobziuchkovski/cue/frame2.function2",
+        "file": "/path/github.com/remerge/cue/frame2/file2.go",
+        "method": "github.com/remerge/cue/frame2.function2",
         "number": 2
       },
       {
-        "file": "/path/github.com/bobziuchkovski/cue/frame1/file1.go",
-        "method": "github.com/bobziuchkovski/cue/frame1.function1",
+        "file": "/path/github.com/remerge/cue/frame1/file1.go",
+        "method": "github.com/remerge/cue/frame1.function1",
         "number": 1
       }
     ],
@@ -57,12 +57,12 @@ const honeybadgerJSON = `
     ]
   },
   "notifier": {
-    "name": "github.com/bobziuchkovski/cue",
-    "url": "https://github.com/bobziuchkovski/cue",
+    "name": "github.com/remerge/cue",
+    "url": "https://github.com/remerge/cue",
     "version": "0.7.0"
   },
   "request": {
-    "component": "github.com/bobziuchkovski/cue/frame3",
+    "component": "github.com/remerge/cue/frame3",
     "context": {
       "extra": "extra value",
       "k1": "some value",
@@ -89,8 +89,8 @@ const honeybadgerNoFramesJSON = `
     ]
   },
   "notifier": {
-    "name": "github.com/bobziuchkovski/cue",
-    "url": "https://github.com/bobziuchkovski/cue",
+    "name": "github.com/remerge/cue",
+    "url": "https://github.com/remerge/cue",
     "version": "0.7.0"
   },
   "request": {

@@ -8,8 +8,8 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/collector"
 )
 
 // This example logs to both the terminal (stdout) and to file.

@@ -25,35 +25,35 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 const sentryJSON = `
 {
-  "culprit": "github.com/bobziuchkovski/cue/frame3.function3",
+  "culprit": "github.com/remerge/cue/frame3.function3",
   "event_id": "c51c8551adaa42ee9b9fd0b63d462e8d",
   "exception": {
-    "module": "github.com/bobziuchkovski/cue/frame3",
+    "module": "github.com/remerge/cue/frame3",
     "stacktrace": {
       "frames": [
         {
-          "filename": "/path/github.com/bobziuchkovski/cue/frame1/file1.go",
-          "function": "github.com/bobziuchkovski/cue/frame1.function1",
+          "filename": "/path/github.com/remerge/cue/frame1/file1.go",
+          "function": "github.com/remerge/cue/frame1.function1",
           "lineno": 1,
-          "module": "github.com/bobziuchkovski/cue/frame1"
+          "module": "github.com/remerge/cue/frame1"
         },
         {
-          "filename": "/path/github.com/bobziuchkovski/cue/frame2/file2.go",
-          "function": "github.com/bobziuchkovski/cue/frame2.function2",
+          "filename": "/path/github.com/remerge/cue/frame2/file2.go",
+          "function": "github.com/remerge/cue/frame2.function2",
           "lineno": 2,
-          "module": "github.com/bobziuchkovski/cue/frame2"
+          "module": "github.com/remerge/cue/frame2"
         },
         {
-          "filename": "/path/github.com/bobziuchkovski/cue/frame3/file3.go",
-          "function": "github.com/bobziuchkovski/cue/frame3.function3",
+          "filename": "/path/github.com/remerge/cue/frame3/file3.go",
+          "function": "github.com/remerge/cue/frame3.function3",
           "lineno": 3,
-          "module": "github.com/bobziuchkovski/cue/frame3"
+          "module": "github.com/remerge/cue/frame3"
         }
       ]
     },

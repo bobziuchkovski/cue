@@ -28,9 +28,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/format"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/format"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 func TestHTTPNilCollector(t *testing.T) {
@@ -120,7 +120,7 @@ func checkHTTPRequest(t *testing.T, req *http.Request) {
 		t.Errorf("Expected POST method but saw %s instead", req.Method)
 	}
 
-	agentExpectation := fmt.Sprintf("github.com/bobziuchkovski/cue %d.%d.%d", cue.Version.Major, cue.Version.Minor, cue.Version.Patch)
+	agentExpectation := fmt.Sprintf("github.com/remerge/cue %d.%d.%d", cue.Version.Major, cue.Version.Minor, cue.Version.Patch)
 	if req.Header.Get("User-Agent") != agentExpectation {
 		t.Errorf("Expected User-Agent header of %q but saw %q instead", agentExpectation, req.Header.Get("User-Agent"))
 	}

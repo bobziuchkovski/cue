@@ -25,8 +25,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/internal/cuetest"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/internal/cuetest"
 )
 
 const rollbarJSON = `
@@ -42,19 +42,19 @@ const rollbarJSON = `
         },
         "frames": [
           {
-            "filename": "/path/github.com/bobziuchkovski/cue/frame1/file1.go",
+            "filename": "/path/github.com/remerge/cue/frame1/file1.go",
             "lineno": 1,
-            "method": "github.com/bobziuchkovski/cue/frame1.function1"
+            "method": "github.com/remerge/cue/frame1.function1"
           },
           {
-            "filename": "/path/github.com/bobziuchkovski/cue/frame2/file2.go",
+            "filename": "/path/github.com/remerge/cue/frame2/file2.go",
             "lineno": 2,
-            "method": "github.com/bobziuchkovski/cue/frame2.function2"
+            "method": "github.com/remerge/cue/frame2.function2"
           },
           {
-            "filename": "/path/github.com/bobziuchkovski/cue/frame3/file3.go",
+            "filename": "/path/github.com/remerge/cue/frame3/file3.go",
             "lineno": 3,
-            "method": "github.com/bobziuchkovski/cue/frame3.function3"
+            "method": "github.com/remerge/cue/frame3.function3"
           }
         ]
       }
@@ -72,7 +72,7 @@ const rollbarJSON = `
     "language": "go",
     "level": "error",
     "notifier": {
-      "name": "github.com/bobziuchkovski/cue",
+      "name": "github.com/remerge/cue",
       "version": "0.7.0"
     },
     "platform": "darwin",
@@ -106,7 +106,7 @@ const rollbarNoFramesJSON = `
     "language": "go",
     "level": "error",
     "notifier": {
-      "name": "github.com/bobziuchkovski/cue",
+      "name": "github.com/remerge/cue",
       "version": "0.7.0"
     },
     "platform": "darwin",

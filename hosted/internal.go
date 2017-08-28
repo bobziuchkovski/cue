@@ -21,7 +21,7 @@
 package hosted
 
 import (
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 )
 
-var log = cue.NewLogger("github.com/bobziuchkovski/cue/hosted")
+var log = cue.NewLogger("github.com/remerge/cue/hosted")

@@ -106,7 +106,8 @@ func (nr *netRecorder) Start() {
 		var listener net.Listener
 
 		if nr.enableTLS {
-			cert, err := tls.LoadX509KeyPair("test.crt", "test.key")
+			var cert tls.Certificate
+			cert, err = tls.LoadX509KeyPair("test.crt", "test.key")
 			if err != nil {
 				panic(err)
 			}

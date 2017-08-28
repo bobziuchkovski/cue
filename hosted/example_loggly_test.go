@@ -10,9 +10,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/hosted"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/collector"
+	"github.com/remerge/cue/hosted"
 )
 
 // This example demonstrates how to use Loggly with TLS transport encryption

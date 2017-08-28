@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/hosted"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/hosted"
 )
 
 // This example shows how to use error reporting services.

@@ -27,16 +27,16 @@ import (
 func TestEventSource(t *testing.T) {
 	e := &Event{}
 	e.captureFrames(1, 1, 1, false)
-	if e.Frames[0].Function != "github.com/bobziuchkovski/cue.TestEventSource" {
-		t.Errorf("Event source function doesn't match expectations.  Expected: %s, received: %s", "github.com/bobziuchkovski/cue.TestEventSource", e.Frames[0].Function)
+	if e.Frames[0].Function != "github.com/remerge/cue.TestEventSource" {
+		t.Errorf("Event source function doesn't match expectations.  Expected: %s, received: %s", "github.com/remerge/cue.TestEventSource", e.Frames[0].Function)
 	}
 }
 
 func TestEventStack(t *testing.T) {
 	e := &Event{}
 	e.captureFrames(1, 2, 2, false)
-	if e.Frames[0].Function != "github.com/bobziuchkovski/cue.TestEventStack" {
-		t.Errorf("Event stack[0] function doesn't match expectations.  Expected: %s, received: %s", "github.com/bobziuchkovski/cue.TestEventStack", e.Frames[0].Function)
+	if e.Frames[0].Function != "github.com/remerge/cue.TestEventStack" {
+		t.Errorf("Event stack[0] function doesn't match expectations.  Expected: %s, received: %s", "github.com/remerge/cue.TestEventStack", e.Frames[0].Function)
 	}
 	if len(e.Frames) != 2 {
 		t.Errorf("Expected 2 frames but received %d instead", len(e.Frames))

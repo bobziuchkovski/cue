@@ -27,9 +27,9 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/collector"
-	"github.com/bobziuchkovski/cue/format"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/collector"
+	"github.com/remerge/cue/format"
 )
 
 // Rollbar represents configuration for the Rollbar service. Collected events
@@ -96,7 +96,7 @@ func (r Rollbar) formatBody(buffer format.Buffer, event *cue.Event) {
 				Host: format.RenderString(format.FQDN, event),
 			},
 			Notifier: rollbarNotifier{
-				Name:    "github.com/bobziuchkovski/cue",
+				Name:    "github.com/remerge/cue",
 				Version: fmt.Sprintf("%d.%d.%d", cue.Version.Major, cue.Version.Minor, cue.Version.Patch),
 			},
 			Language: "go",

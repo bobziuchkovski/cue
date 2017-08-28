@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 )
 
 // ContextFilter is used with a Pipeline to filter context key/value pairs.

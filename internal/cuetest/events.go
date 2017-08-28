@@ -23,7 +23,7 @@ package cuetest
 import (
 	"errors"
 	"fmt"
-	"github.com/bobziuchkovski/cue"
+	"github.com/remerge/cue"
 	"time"
 )
 
@@ -65,9 +65,9 @@ func GenerateEvent(level cue.Level, context cue.Context, message string, err err
 	}
 	for i := frames; i > 0; i-- {
 		event.Frames = append(event.Frames, &cue.Frame{
-			Package:  fmt.Sprintf("github.com/bobziuchkovski/cue/frame%d", i),
-			Function: fmt.Sprintf("github.com/bobziuchkovski/cue/frame%d.function%d", i, i),
-			File:     fmt.Sprintf("/path/github.com/bobziuchkovski/cue/frame%d/file%d.go", i, i),
+			Package:  fmt.Sprintf("github.com/remerge/cue/frame%d", i),
+			Function: fmt.Sprintf("github.com/remerge/cue/frame%d.function%d", i, i),
+			File:     fmt.Sprintf("/path/github.com/remerge/cue/frame%d/file%d.go", i, i),
 			Line:     i,
 		})
 	}

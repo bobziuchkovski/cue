@@ -27,8 +27,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bobziuchkovski/cue"
-	"github.com/bobziuchkovski/cue/format"
+	"github.com/remerge/cue"
+	"github.com/remerge/cue/format"
 )
 
 // File represents configuration for file-based Collector instances. The default
