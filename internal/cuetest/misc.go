@@ -21,9 +21,10 @@
 package cuetest
 
 import (
-	"github.com/remerge/cue"
 	"io"
 	"time"
+
+	"github.com/remerge/cue"
 )
 
 // CloseCollector calls c.Close() if c implements the io.Closer interface.

@@ -21,9 +21,10 @@
 package cuetest
 
 import (
-	"github.com/remerge/cue"
 	"sync"
 	"time"
+
+	"github.com/remerge/cue"
 )
 
 // CapturingCollector captures events that are sent to its Collect method.

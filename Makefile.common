@@ -2,6 +2,7 @@
 TOP := $(dir $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 
 GOFMT=gofmt -w -s
+GOIMPORTS=goimports -w
 
 GOSRCDIR=$(GOPATH)/src/$(PACKAGE)
 GOPATHS=$(shell glide novendor | grep -v /main/)
@@ -72,6 +73,7 @@ bench: build
 
 fmt:
 	$(GOFMT) $(GOFILES)
+	$(GOIMPORTS) $(GOFILES)
 
 dep:
 	go get -u github.com/Masterminds/glide

@@ -23,8 +23,9 @@ package cuetest
 import (
 	"errors"
 	"fmt"
-	"github.com/remerge/cue"
 	"time"
+
+	"github.com/remerge/cue"
 )
 
 // We ensure deterministic iteration order by using multiple WithValue
