@@ -1,10 +1,11 @@
-language: go
 sudo: false
-
+language: go
 go:
-- 1.8.3
-
+- 1.9.2
+cache:
+  directories:
+  - vendor
+install:
+- make dep
 script:
-- go tool -n vet || go get golang.org/x/tools/cmd/vet
-- go vet ./...
-- go test -v -race ./...
+- make test clean

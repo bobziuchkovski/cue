@@ -26,12 +26,11 @@ import (
 )
 
 var (
-	emptyPairs   = (*pairs)(nil)
-	emptyContext = NewContext("")
-	errorP       = (*error)(nil)
-	errorT       = reflect.TypeOf(errorP).Elem()
-	stringerP    = (*fmt.Stringer)(nil)
-	stringerT    = reflect.TypeOf(stringerP).Elem()
+	emptyPairs = (*pairs)(nil)
+	errorP     = (*error)(nil)
+	errorT     = reflect.TypeOf(errorP).Elem()
+	stringerP  = (*fmt.Stringer)(nil)
+	stringerT  = reflect.TypeOf(stringerP).Elem()
 )
 
 // Fields is a map representation of contextual key/value pairs.
