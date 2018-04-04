@@ -52,6 +52,7 @@ type Collector interface {
 
 // Logger is the interface for logging instances.
 type Logger interface {
+	EnabledFor(level Level) bool
 	// WithFields returns a new logger instance with fields added to the current
 	// logger's context.
 	WithFields(fields Fields) Logger
@@ -229,6 +230,10 @@ func (l *logger) ReportRecovery(cause interface{}, message string) {
 		return
 	}
 	l.sendRecovery(cause, message)
+}
+
+func (l *logger) EnabledFor(level Level) bool {
+	return level <= cfg.get().threshold
 }
 
 func (l *logger) send(level Level, err error, message string) {

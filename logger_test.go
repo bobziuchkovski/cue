@@ -75,6 +75,26 @@ func TestLoggerContext(t *testing.T) {
 	}
 }
 
+func TestLoggerEnabledFor(t *testing.T) {
+	defer resetCue()
+	c := newCapturingCollector()
+	Collect(INFO, c)
+
+	log := NewLogger("test")
+	isEnabled := log.EnabledFor(DEBUG)
+	if isEnabled {
+		t.Errorf("Should NOT be enabled for DEBUG")
+	}
+	isEnabled = log.EnabledFor(INFO)
+	if !isEnabled {
+		t.Errorf("Should be enabled for INFO")
+	}
+	isEnabled = log.EnabledFor(ERROR)
+	if !isEnabled {
+		t.Errorf("Should be enabled for ERROR")
+	}
+}
+
 func TestLoggerDebug(t *testing.T) {
 	defer resetCue()
 	c := newCapturingCollector()
