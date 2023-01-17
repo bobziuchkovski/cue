@@ -21,7 +21,6 @@
 package format
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -277,12 +276,24 @@ func Hostname(buffer Buffer, event *cue.Event) {
 // FQDN writes the host's fully-qualified domain name (FQDN) to the buffer.
 // If the FQDN cannot be determined, "unknown" is written instead.
 func FQDN(buffer Buffer, event *cue.Event) {
+	buffer.AppendString(fqdn())
+}
+
+func fqdn() string {
+	// try the hostname command first
 	out, err := exec.Command("/bin/hostname", "-f").Output()
 	if err == nil {
-		buffer.Append(bytes.TrimSpace(out))
-	} else {
-		buffer.AppendString("unknown")
+		return strings.TrimSpace(string(out))
 	}
+
+	// fall back to env variable
+	name := os.Getenv("HOSTNAME")
+	if name != "" {
+		return name
+	}
+
+	// we tried
+	return "unknown"
 }
 
 // Level writes event.Level.String() to the buffer.  Hence, it writes "INFO"
